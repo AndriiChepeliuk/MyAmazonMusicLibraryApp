@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MyAmazonMusicLibraryApp.Views.MusicLibraryView">
+
+	<StackPanel Orientation="Horizontal" Margin="10">
+		<Border CornerRadius="10" ClipToBounds="True">
+			<Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="1" Width="200" Stretch="Uniform" Source="{Binding Cover}" />
+		</Border>
+
+		<Grid ColumnDefinitions="Auto" RowDefinitions="100,100">
+			<TextBlock
+				Text="{Binding Model.MusicLib.MusicLibName}"
+				Grid.Row="0"
+				Grid.Column="0"
+				Margin="20"
+				TextBlock.FontSize="50"
+				TextBlock.FontWeight="ExtraBold"/>
+			<TextBlock
+				Text="{Binding Model.MusicLib.Description}"
+				Grid.Row="1"
+				Grid.Column="0"
+				Margin="20"
+				TextBlock.FontSize="20"
+				TextBlock.FontWeight="Regular"/>
+		</Grid>
+	</StackPanel>
+</UserControl>

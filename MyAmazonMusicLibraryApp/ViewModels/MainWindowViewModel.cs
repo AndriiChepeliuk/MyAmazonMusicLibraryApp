@@ -13,6 +13,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
     {
         private bool _isBusy;
         private string? searchUrl;
+        private MusicLibViewModel model;
         private Bitmap? _cover;
         private Regex playlistRegex = new Regex("^https?:\\/\\/music.amazon.com\\/playlists\\/[A-Z0-9]{10}$");
         private Regex albumRegex = new Regex("^https?:\\/\\/music.amazon.com\\/albums\\/[A-Z0-9]{10}$");
@@ -28,6 +29,11 @@ namespace MyAmazonMusicLibraryApp.ViewModels
         {
             get => _cover;
             private set => this.RaiseAndSetIfChanged(ref _cover, value);
+        }
+        public MusicLibViewModel Model
+        {
+            get => model;
+            set => this.RaiseAndSetIfChanged(ref model, value);
         }
         public bool IsBusy
         {
@@ -45,7 +51,8 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                     (playlistRegex.IsMatch(SearchUrl) ||
                     albumRegex.IsMatch(SearchUrl)))
                 {
-
+                    Model = new MusicLibViewModel(SearchUrl);
+                    Cover = await LoadCoverAsync(Model.MusicLibrary.AvatarUrl);
                 }
 
                 IsBusy = false;
