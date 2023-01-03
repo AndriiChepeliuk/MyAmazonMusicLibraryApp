@@ -6,12 +6,33 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MyAmazonMusicLibraryApp.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="MyAmazonMusicLibraryApp">
+        Title="MyAmazonMusicLibraryApp"
+		TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+		ExtendClientAreaToDecorationsHint="True"
+		WindowStartupLocation="CenterScreen"
+		Width="1600" Height="900">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Panel>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="Black"
+					TintOpacity="1"
+					MaterialOpacity="0.65" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+		<Panel Margin="40">
+			<StackPanel DockPanel.Dock="Top">
+				<TextBox Text="{Binding SearchUrl}" Watermark="Find your music library...." />
+				<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" />
+				<Button Command="{Binding FindMusicLibCommand}" HorizontalAlignment="Right" Margin="5, 5, 0, 5">
+					<PathIcon Data="{StaticResource search_regular}" />
+				</Button>
+			</StackPanel>
+		</Panel>
+	</Panel>
+	
 </Window>

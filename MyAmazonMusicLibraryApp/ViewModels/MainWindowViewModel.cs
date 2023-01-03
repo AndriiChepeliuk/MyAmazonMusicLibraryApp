@@ -1,11 +1,70 @@
+using Avalonia.Media.Imaging;
+using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MyAmazonMusicLibraryApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public string Greeting => "Welcome to Avalonia!";
+        private bool _isBusy;
+        private string? searchUrl;
+        private Bitmap? _cover;
+        private Regex playlistRegex = new Regex("^https?:\\/\\/music.amazon.com\\/playlists\\/[A-Z0-9]{10}$");
+        private Regex albumRegex = new Regex("^https?:\\/\\/music.amazon.com\\/albums\\/[A-Z0-9]{10}$");
+
+        public ICommand FindMusicLibCommand { get; }
+
+        public string? SearchUrl
+        {
+            get => searchUrl;
+            set => this.RaiseAndSetIfChanged(ref searchUrl, value);
+        }
+        public Bitmap? Cover
+        {
+            get => _cover;
+            private set => this.RaiseAndSetIfChanged(ref _cover, value);
+        }
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => this.RaiseAndSetIfChanged(ref _isBusy, value);
+        }
+
+        public MainWindowViewModel()
+        {
+            FindMusicLibCommand = ReactiveCommand.Create(async () =>
+            {
+                IsBusy = true;
+
+                if (!String.IsNullOrEmpty(SearchUrl) &&
+                    (playlistRegex.IsMatch(SearchUrl) ||
+                    albumRegex.IsMatch(SearchUrl)))
+                {
+
+                }
+
+                IsBusy = false;
+            });
+        }
+
+        public async Task<Bitmap> LoadCoverAsync(string coverUrl)
+        {
+            await using (var imageStream = await LoadCoverBitmapAsync(coverUrl))
+            {
+                return await Task.Run(() => Bitmap.DecodeToWidth(imageStream, 400));
+            }
+        }
+
+        public async Task<Stream> LoadCoverBitmapAsync(string coverUrl)
+        {
+            var data = await new HttpClient().GetByteArrayAsync(coverUrl);
+
+            return new MemoryStream(data);
+        }
     }
 }
