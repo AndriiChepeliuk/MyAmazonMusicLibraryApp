@@ -34,6 +34,7 @@
 				</Button>
 
 				<local:MusicLibraryView/>
+				<local:SongsView/>
 			</StackPanel>
 		</Panel>
 	</Panel>

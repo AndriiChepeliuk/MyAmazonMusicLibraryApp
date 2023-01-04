@@ -8,7 +8,7 @@
 
 	<Panel>
 		<Border CornerRadius="10" ClipToBounds="True">
-			<ListBox Name="list" Items="{Binding Model.Songs}" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+			<ListBox Name="list" Items="{Binding Songs}" ScrollViewer.HorizontalScrollBarVisibility="Visible">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<Grid ColumnDefinitions="800,600,50" RowDefinitions="20,20">
