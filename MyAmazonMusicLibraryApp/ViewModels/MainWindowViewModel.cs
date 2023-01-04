@@ -18,7 +18,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
         private Regex playlistRegex = new Regex("^https?:\\/\\/music.amazon.com\\/playlists\\/[A-Z0-9]{10}$");
         private Regex albumRegex = new Regex("^https?:\\/\\/music.amazon.com\\/albums\\/[A-Z0-9]{10}$");
 
-        public ICommand FindMusicLibCommand { get; }
+        public ICommand FindMusicLibCommand { get; } 
 
         public string? SearchUrl
         {
@@ -52,6 +52,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                     albumRegex.IsMatch(SearchUrl)))
                 {
                     Model = new MusicLibViewModel(SearchUrl);
+                    await Model.InitializeModel();
                     Cover = await LoadCoverAsync(Model.MusicLibrary.AvatarUrl);
                 }
 

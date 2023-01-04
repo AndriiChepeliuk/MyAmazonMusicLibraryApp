@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Drawing;
 using HtmlAgilityPack;
-using System.Linq;
+using ReactiveUI;
 
 namespace MyAmazonMusicLibraryApp.ViewModels
 {
@@ -24,17 +24,24 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             ["ALBUM"] = "//*//music-container/div/div[2]/div/div/music-text-row"
         };
 
-        public MusicLibEntity MusicLibrary { get { return musicLibrary; } }
-        public List<SongEntity> Songs { get { return songs; } }
+        public MusicLibEntity MusicLibrary
+        {
+            get => musicLibrary;
+            set => this.RaiseAndSetIfChanged(ref musicLibrary, value);
+        }
+        public List<SongEntity> Songs
+        {
+            get => songs;
+            set => this.RaiseAndSetIfChanged(ref songs, value);
+        }
         public string Url { get { return url; } set { this.url = value; } }
 
         public MusicLibViewModel(string searchUrl)
         {
             this.url = searchUrl;
-            InitializeModel();
         }
 
-        public async void InitializeModel()
+        public async Task InitializeModel()
         {
             using (ChromiumWebBrowser browser = new ChromiumWebBrowser(Url))
             {
@@ -55,9 +62,8 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                 htmlDocument.LoadHtml(html);
             }
 
-            musicLibrary = GetMusicLibEntity(musicLibHtmlXPath);
+            MusicLibrary = GetMusicLibEntity(musicLibHtmlXPath);
 
-            //var t = htmlDocument.DocumentNode.SelectSingleNode(musicLibHtmlXPath);
 
 
         }
@@ -72,7 +78,33 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             musicLib.MusicLibName = musicLibData.GetAttributeValue("headline", "");
             musicLib.AvatarUrl = musicLibData.GetAttributeValue("image-src", "");
 
+            switch (musicLib.MusicLibType)
+            {
+                case "PLAYLIST":
+                    musicLib.Description = musicLibData.GetAttributeValue("secondary-text", "");
+                    break;
+
+                case "ALBUM":
+                    musicLib.Description = musicLib.AlbumArtist = musicLibData.GetAttributeValue("primary-text", "");
+                    break;
+
+                default:
+                    musicLib.Description = "";
+                    break;
+            }
+
             return musicLib;
         }
+
+        //public List<SongEntity> GetPlaylistSongs(
+        //    HtmlDocument htmlDocument,
+        //    string songsContentHtmlXPath,
+        //    int musicLibSongsCount)
+        //{
+        //    var songs = new List<SongEntity>();
+        //    var
+
+        //    return songs;
+        //}
     }
 }
