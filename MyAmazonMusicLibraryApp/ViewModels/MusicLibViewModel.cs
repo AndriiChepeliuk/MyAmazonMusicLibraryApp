@@ -117,7 +117,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                 song.SongName = songData.GetAttributeValue("primary-text", "");
                 song.ArtistName = songData.GetAttributeValue("secondary-text-1", "");
                 song.AlbumName = songData.GetAttributeValue("secondary-text-2", "");
-                song.Duration = htmlDocument.DocumentNode.SelectSingleNode(songsContentHtmlXPath + "/div/div[4]").InnerText;
+                song.Duration = htmlDocument.DocumentNode.SelectSingleNode(songData.XPath + "/div/div[4]").InnerText;
                 songs.Add(song);
             }
             return songs;
