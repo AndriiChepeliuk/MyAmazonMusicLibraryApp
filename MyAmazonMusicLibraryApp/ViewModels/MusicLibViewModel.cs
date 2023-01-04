@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using HtmlAgilityPack;
 using ReactiveUI;
+using System.Linq;
 
 namespace MyAmazonMusicLibraryApp.ViewModels
 {
@@ -64,8 +65,23 @@ namespace MyAmazonMusicLibraryApp.ViewModels
 
             MusicLibrary = GetMusicLibEntity(musicLibHtmlXPath);
 
+            switch (MusicLibrary.MusicLibType)
+            {
+                case "PLAYLIST":
+                    songs = GetPlaylistSongs(htmlDocument,
+                                    songsContentHtmlXPath[MusicLibrary.MusicLibType]);
+                    break;
 
+                case "ALBUM":
+                    songs = GetAlbumSongs(htmlDocument,
+                                    songsContentHtmlXPath[MusicLibrary.MusicLibType],
+                                    MusicLibrary.AlbumArtist);
+                    break;
 
+                default:
+                    songs = new List<SongEntity>();
+                    break;
+            }
         }
 
         public MusicLibEntity GetMusicLibEntity(string musicLibHtmlXPath)
@@ -96,15 +112,46 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             return musicLib;
         }
 
-        //public List<SongEntity> GetPlaylistSongs(
-        //    HtmlDocument htmlDocument,
-        //    string songsContentHtmlXPath,
-        //    int musicLibSongsCount)
-        //{
-        //    var songs = new List<SongEntity>();
-        //    var
+        public List<SongEntity> GetPlaylistSongs(
+            HtmlDocument htmlDocument,
+            string songsContentHtmlXPath)
+        {
+            var songs = new List<SongEntity>();
+            var songsContent = htmlDocument.DocumentNode.SelectNodes(songsContentHtmlXPath);
 
-        //    return songs;
-        //}
+            foreach (var songData in songsContent)
+            {
+                var song = new SongEntity();
+
+                song.SongName = songData.GetAttributeValue("primary-text", "");
+                song.ArtistName = songData.GetAttributeValue("secondary-text-1", "");
+                song.AlbumName = songData.GetAttributeValue("secondary-text-2", "");
+                song.Duration = htmlDocument.DocumentNode.SelectSingleNode(songsContentHtmlXPath + "/div/div[4]").InnerText;
+                songs.Add(song);
+            }
+            return songs;
+        }
+
+        public List<SongEntity> GetAlbumSongs(
+            HtmlDocument htmlDocument,
+            string songsContentHtmlXPath,
+            string artistName)
+        {
+            var songs = new List<SongEntity>();
+            var songsContent = htmlDocument.DocumentNode.SelectNodes(songsContentHtmlXPath);
+
+            foreach (var songData in songsContent)
+            {
+                var song = new SongEntity();
+
+                song.SongName = songData.GetAttributeValue("primary-text", "");
+                song.ArtistName = artistName;
+                song.AlbumName = songData.GetAttributeValue("secondary-text-2", "");
+                song.Duration = htmlDocument.DocumentNode.SelectSingleNode(songsContentHtmlXPath + "/div/div[4]").InnerText;
+                songs.Add(song);
+            }
+
+            return songs;
+        }
     }
 }
