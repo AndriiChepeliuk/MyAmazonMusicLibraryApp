@@ -36,7 +36,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
         {
             using (ChromiumWebBrowser browser = new ChromiumWebBrowser(url))
             {
-                browser.Size = new Size(1920, 5000);
+                browser.Size = new Size(1920, 15000);
 
                 var initialLoadResponse = await browser.WaitForInitialLoadAsync();
 
@@ -48,7 +48,8 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                 await Task.Delay(5000);
 
                 var response = await browser.EvaluateScriptAsync("document.documentElement.outerHTML");
-                string html = (String)response.Result;
+                string htmlTemp = (String)response.Result;
+                string html = htmlTemp.Replace("&amp;", "&");
                 htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(html);
             }

@@ -33,6 +33,8 @@
 					<PathIcon Data="{StaticResource search_regular}" />
 				</Button>
 
+				<TextBlock IsVisible="{Binding MusicLibraryEmpty}" Text="Its lonely in here. Purchase some music to get your collection started." HorizontalAlignment="Center" VerticalAlignment="Center" />
+
 				<local:MusicLibraryView/>
 				<local:SongsView/>
 			</StackPanel>

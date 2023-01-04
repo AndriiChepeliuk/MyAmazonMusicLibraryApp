@@ -13,6 +13,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private bool _musicLibraryEmpty = true;
         private bool _isBusy;
         private string? searchUrl;
         private MusicLibViewModel model;
@@ -33,7 +34,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref songs, value);
         }
 
-        public ICommand FindMusicLibCommand { get; } 
+        public ICommand FindMusicLibCommand { get; }
 
         public string? SearchUrl
         {
@@ -55,6 +56,11 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             get => _isBusy;
             set => this.RaiseAndSetIfChanged(ref _isBusy, value);
         }
+        public bool MusicLibraryEmpty
+        {
+            get => _musicLibraryEmpty;
+            set => this.RaiseAndSetIfChanged(ref _musicLibraryEmpty, value);
+        }
 
         public MainWindowViewModel()
         {
@@ -66,6 +72,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                     (playlistRegex.IsMatch(SearchUrl) ||
                     albumRegex.IsMatch(SearchUrl)))
                 {
+                    MusicLibraryEmpty = false;
                     Model = new MusicLibViewModel(SearchUrl);
                     await Model.InitializeModel();
                     MusicLibrary = Model.MusicLibrary;
