@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Drawing;
 using HtmlAgilityPack;
-using ReactiveUI;
-using System.Linq;
 
 namespace MyAmazonMusicLibraryApp.ViewModels
 {
@@ -25,17 +23,9 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             ["ALBUM"] = "//*//music-container/div/div[2]/div/div/music-text-row"
         };
 
-        public MusicLibEntity MusicLibrary
-        {
-            get => musicLibrary;
-            set => this.RaiseAndSetIfChanged(ref musicLibrary, value);
-        }
-        public List<SongEntity> Songs
-        {
-            get => songs;
-            set => this.RaiseAndSetIfChanged(ref songs, value);
-        }
-        public string Url { get { return url; } set { this.url = value; } }
+        public MusicLibEntity MusicLibrary { get => musicLibrary; }
+        public List<SongEntity> Songs { get => songs; }
+        public string Url { set { this.url = value; } }
 
         public MusicLibViewModel(string searchUrl)
         {
@@ -44,7 +34,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
 
         public async Task InitializeModel()
         {
-            using (ChromiumWebBrowser browser = new ChromiumWebBrowser(Url))
+            using (ChromiumWebBrowser browser = new ChromiumWebBrowser(url))
             {
                 browser.Size = new Size(1920, 5000);
 
@@ -63,7 +53,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                 htmlDocument.LoadHtml(html);
             }
 
-            MusicLibrary = GetMusicLibEntity(musicLibHtmlXPath);
+            musicLibrary = GetMusicLibEntity(musicLibHtmlXPath);
 
             switch (MusicLibrary.MusicLibType)
             {

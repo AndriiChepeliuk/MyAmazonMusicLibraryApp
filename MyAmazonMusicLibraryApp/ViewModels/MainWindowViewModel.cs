@@ -19,8 +19,6 @@ namespace MyAmazonMusicLibraryApp.ViewModels
         private Bitmap? _cover;
         private Regex playlistRegex = new Regex("^https?:\\/\\/music.amazon.com\\/playlists\\/[A-Z0-9]{10}$");
         private Regex albumRegex = new Regex("^https?:\\/\\/music.amazon.com\\/albums\\/[A-Z0-9]{10}$");
-
-        //=============
         private MusicLibEntity musicLibrary = new MusicLibEntity();
         private List<SongEntity> songs = new List<SongEntity>();
 
@@ -34,7 +32,6 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             get => songs;
             set => this.RaiseAndSetIfChanged(ref songs, value);
         }
-        //=============
 
         public ICommand FindMusicLibCommand { get; } 
 
