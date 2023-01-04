@@ -120,6 +120,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                 song.Duration = htmlDocument.DocumentNode.SelectSingleNode(songData.XPath + "/div/div[4]").InnerText;
                 songs.Add(song);
             }
+
             return songs;
         }
 

@@ -23,6 +23,7 @@ namespace MyAmazonMusicLibraryApp.ViewModels
         private MusicLibEntity musicLibrary = new MusicLibEntity();
         private List<SongEntity> songs = new List<SongEntity>();
 
+        public ICommand FindMusicLibCommand { get; }
         public MusicLibEntity MusicLibrary
         {
             get => musicLibrary;
@@ -33,9 +34,6 @@ namespace MyAmazonMusicLibraryApp.ViewModels
             get => songs;
             set => this.RaiseAndSetIfChanged(ref songs, value);
         }
-
-        public ICommand FindMusicLibCommand { get; }
-
         public string? SearchUrl
         {
             get => searchUrl;
