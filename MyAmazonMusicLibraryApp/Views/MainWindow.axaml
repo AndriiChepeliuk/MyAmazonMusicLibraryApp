@@ -33,10 +33,18 @@
 					<PathIcon Data="{StaticResource search_regular}" />
 				</Button>
 
+				<TextBlock
+					IsVisible="{Binding MusicLibraryEmpty}"
+					Text="It's lonely here. Enter the URL of your music collection to get it."
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					TextBlock.FontSize="16"
+					TextBlock.FontWeight="SemiLight" />
+
 				<local:MusicLibraryView/>
 				<local:SongsView/>
 			</StackPanel>
 		</Panel>
 	</Panel>
-	
+
 </Window>
