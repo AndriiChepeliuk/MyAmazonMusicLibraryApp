@@ -12,14 +12,14 @@
 
 		<Grid ColumnDefinitions="Auto" RowDefinitions="100,100">
 			<TextBlock
-				Text="{Binding Model.MusicLib.MusicLibName}"
+				Text="{Binding MusicLibrary.MusicLibName}"
 				Grid.Row="0"
 				Grid.Column="0"
 				Margin="20"
 				TextBlock.FontSize="50"
 				TextBlock.FontWeight="ExtraBold"/>
 			<TextBlock
-				Text="{Binding Model.MusicLib.Description}"
+				Text="{Binding MusicLibrary.Description}"
 				Grid.Row="1"
 				Grid.Column="0"
 				Margin="20"

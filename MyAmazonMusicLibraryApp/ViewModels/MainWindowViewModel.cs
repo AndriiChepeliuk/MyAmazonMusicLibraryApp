@@ -1,6 +1,8 @@
 using Avalonia.Media.Imaging;
+using MyAmazonMusicLibraryApp.Models;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -17,8 +19,21 @@ namespace MyAmazonMusicLibraryApp.ViewModels
         private Bitmap? _cover;
         private Regex playlistRegex = new Regex("^https?:\\/\\/music.amazon.com\\/playlists\\/[A-Z0-9]{10}$");
         private Regex albumRegex = new Regex("^https?:\\/\\/music.amazon.com\\/albums\\/[A-Z0-9]{10}$");
+        private MusicLibEntity musicLibrary = new MusicLibEntity();
+        private List<SongEntity> songs = new List<SongEntity>();
 
-        public ICommand FindMusicLibCommand { get; }
+        public MusicLibEntity MusicLibrary
+        {
+            get => musicLibrary;
+            set => this.RaiseAndSetIfChanged(ref musicLibrary, value);
+        }
+        public List<SongEntity> Songs
+        {
+            get => songs;
+            set => this.RaiseAndSetIfChanged(ref songs, value);
+        }
+
+        public ICommand FindMusicLibCommand { get; } 
 
         public string? SearchUrl
         {
@@ -52,7 +67,10 @@ namespace MyAmazonMusicLibraryApp.ViewModels
                     albumRegex.IsMatch(SearchUrl)))
                 {
                     Model = new MusicLibViewModel(SearchUrl);
+                    await Model.InitializeModel();
+                    MusicLibrary = Model.MusicLibrary;
                     Cover = await LoadCoverAsync(Model.MusicLibrary.AvatarUrl);
+                    Songs = Model.Songs;
                 }
 
                 IsBusy = false;
